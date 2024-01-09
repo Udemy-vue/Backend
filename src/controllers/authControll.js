@@ -1,24 +1,60 @@
-import { validationResult } from 'express-validator'
+// import { validationResult } from 'express-validator'
+import { User } from '../models/User.js';
+import jwt from 'jsonwebtoken';
 
-export const postlogin = (req, res) => {
-  // const errors = validationResult(req);
+export const postlogin = async (req, res) => {
+	// console.log(req.body)
+  try {
+    const {email, password} = req.body;
+    
+    var user = await User.findOne({ email });
+    if(!user) throw { code: 11000 };
+    // console.log('Hola mundo')
+    const resultado = await user.comparePassword(password);
+    // console.log(resultado);
+    if(!resultado) throw { code: 12000 };
 
-  // if(!errors.isEmpty()){
-  //   return res.status(400).json({ errors: errors.array()});
-  // }
 
-	console.log(req.body)
-  res.json({ login: true });
+    const token = jwt.sign({ user: user }, process.env.JWT_SECRET )
+    
+    return res.json({ token });
+
+  } catch(e) {
+    // statements
+    // console.log(e.code);
+    if(e.code === 11000 ) {
+      return res.status(403).json({error: 'No existe este usuario' });
+    }
+    if(e.code === 12000 ) {
+      return res.status(403).json({error: 'Contraseña Incorrecta' });
+    }
+    return res.status(500).json({ error: "Error de servidor" });
+  }
 }
 
-export const postregister = (req, res) => {
-  // const errors = validationResult(req);
-
-  // if(!errors.isEmpty()){
-  //   return res.status(400).json({ errors: errors.array()});
-  // }
+export const postregister = async (req, res) => {
   console.log(req.body)
-  res.json({ registro: true });
+  // res.json({ registro: true });
+  try {
+    // statements
+    const {email, password} = req.body;
+    
+    // Alternativa buscando por email
+    var user = await User.findOne({ email })
+    if (user) throw { code: 11000 };
+
+    user = new User({ email, password });
+    await user.save();
+
+    return res.json({ registro: "adicionado"})
+  } catch(e) {
+    // statements
+    // alternativa por defecto mongoose
+    console.log(e.menssage);
+    if(e.code === 11000) {
+      return res.status(400).json({error: 'Existe este usuario'});
+    }
+    return res.status(500).json({ error: "Error de servidor" });
+  }
 }
 
-// export const get
