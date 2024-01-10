@@ -2,6 +2,8 @@ import express from 'express';
 import { body } from 'express-validator';
 import * as authControll from '../controllers/authControll.js';
 import { validationResultExpress } from '../middlewares/Validation.js'
+import { requireToken } from '../middlewares/requireAuth.js';
+
 const router = express.Router();
 // console.log('hola mundo')
 // router.get("/login", authControll.getlogin);
@@ -14,6 +16,7 @@ router.post("/login",
 			.trim()
 			.isEmail()
 			.normalizeEmail(),
+
 
 		body('password', "Formato de Contraseña Incorrecta")
 			.isLength({ min: 6 })
@@ -39,5 +42,8 @@ router.post('/register',
 	],
 	validationResultExpress,
 	authControll.postregister);
+
+router.get('/protected', requireToken, authControll.infoUser );
+
 
 export default router;

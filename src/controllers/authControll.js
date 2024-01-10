@@ -1,6 +1,7 @@
 // import { validationResult } from 'express-validator'
 import { User } from '../models/User.js';
 import jwt from 'jsonwebtoken';
+import { generateToken } from '../utils/generateToken.js';
 
 export const postlogin = async (req, res) => {
 	// console.log(req.body)
@@ -15,9 +16,10 @@ export const postlogin = async (req, res) => {
     if(!resultado) throw { code: 12000 };
 
 
-    const token = jwt.sign({ user: user }, process.env.JWT_SECRET )
+    // const token = jwt.sign({ user: user }, process.env.JWT_SECRET )
+    const {token, expiresIn } = generateToken(user.id);
     
-    return res.json({ token });
+    return res.json({ token, expiresIn });
 
   } catch(e) {
     // statements
@@ -58,3 +60,13 @@ export const postregister = async (req, res) => {
   }
 }
 
+export const infoUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.uid).lean();
+    return res.json({ email: user.email });
+  } catch(e) {
+    // statements
+    return res.status(500).json({ error: 'error de server' });
+  }
+  
+}
