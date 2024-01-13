@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Ruta protegida</title>
+</head>
+<body>
+	<h1>Ruta Protegida</h1>
+	<form action="" id="form">
+		
+		<!-- <input type="text" id="a"> -->
+
+		<button type="submit">Cerrar secion</button>
+		<h2>Email: </h2>
+		<p id="b"></p>
+		<h2>Uid: </h2>
+		<p id="c"></p>
+ 
+	</form>
+
+	<script>
+		const form = document.getElementById("form");
+		// const input = document.getElementById("a");
+		const email = document.getElementById("b");
+		const uid = document.getElementById("c");
+
+
+		// console.log(form);
+		
+		form.addEventListener("submit", async (e) => {
+			try {
+				// statements
+				const res = await fetch('/api/logout', {
+					method: 'GET',
+					// headers: {
+						// 'Content-Type': 'application/json',
+						// 'Authorization': `Bearer ${token}`,
+					// },
+					// credentials: "include",
+				});
+				console.log(res)
+			} catch(e) {
+				// statements
+				console.log(e);
+			}
+		});
+
+		document.addEventListener("DOMContentLoaded", async (e) => {
+			e.preventDefault();
+			// console.log('hola mundo');
+
+			try {
+				// console.log('hola mundo');
+				// console.log(token.value)
+				// var token = input.value;
+				// if(token.length === 0) token = localStorage.getItem('token');
+						// 'Authorization': `Bearer ${token}`,
+				const resToken = await fetch('/api/refresh', {
+					method: "GET",
+					credentials: "include",
+				});
+
+				const {token} = await resToken.json();
+				// console.log('ashdfjkahsdf')
+				// console.log(token)
+
+				const res = await fetch('/api/protected', {
+					method: 'GET',
+					headers: {
+						'Content-Type': 'application/json',
+						'Authorization': `Bearer ${token}`,
+					},
+					credentials: "include",
+				});
+
+				console.log(res.ok, res.status);
+				const data = await res.json();
+
+				console.log(data);
+				email.textContent = data.email;
+				uid.textContent = data.uid;
+				// console.log(data);
+
+			} catch(e) {
+				// statements
+				console.log(e);
+			}
+		});
+	</script>
+</body>
+</html>

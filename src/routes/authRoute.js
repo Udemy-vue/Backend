@@ -17,7 +17,6 @@ router.post("/login",
 			.isEmail()
 			.normalizeEmail(),
 
-
 		body('password', "Formato de Contraseña Incorrecta")
 			.isLength({ min: 6 })
 	],
@@ -45,5 +44,8 @@ router.post('/register',
 
 router.get('/protected', requireToken, authControll.infoUser );
 
+router.get('/refresh', authControll.refeshToken );
+
+router.get('/logout', authControll.logout);
 
 export default router;

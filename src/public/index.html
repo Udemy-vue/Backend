@@ -8,18 +8,30 @@
 </head>
 <body>
 	<form action="" id="form">
+		<input type="text" id="a">
+		<input type="text" id="b">
+
 		<button type="submit">boton</button>
+		<h2>Token: </h2>
+		<h2 id="c" style="width: 5rem"></h2>
+		<h2>ExpiresIn: </h2>
+		<h2 id="d"></h2>
 	</form>
 
 
 	<script>
 		const form = document.getElementById("form");
+
+		const dato = document.getElementById("c");
+		const ex = document.getElementById("d");
 		const password = "123123";
 		const email = "deus@test.com";
 
 		form.addEventListener("submit", async (e) => {
 			e.preventDefault();
+			// console.log('holamundo')
 			try {
+				// console.log('Email:', email, 'Password:', password);
 				console.log(password);
 				console.log(email);
 
@@ -28,13 +40,21 @@
 					headers: {
 						'Content-Type': 'application/json'
 					},
-					body: JSON.stringify({ email: email, password: password  })
+					body: JSON.stringify({ 
+						email: email, 
+						password: password
+				  })
 				});
 				// console.log('hola mundo')
 				console.log(res.ok, res.status);
 
 				const data = await res.json();
-				console.log(data);
+				// console.log(data);
+
+				// localStorage.setItem('token', data.token);
+
+				// dato.textContent = data.token;
+				// ex.textContent = data.expiresIn;
 			} catch(e) {
 				// statements
 				console.log(e);

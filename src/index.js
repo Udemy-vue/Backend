@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import path from 'path';
 import esm from 'esm';
+import cookieParser from 'cookie-parser';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -13,6 +14,7 @@ const __dirname = dirname(__filename);
 const app = express();
 
 app.use(express.json());
+app.use(cookieParser());
 app.use('/api', authRouter);
 
 // Serve static files from the 'public' directory
