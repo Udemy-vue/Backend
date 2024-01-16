@@ -1,10 +1,12 @@
 // import { validationResult } from 'express-validator'
 import { User } from '../models/User.js';
 import jwt from 'jsonwebtoken';
-import { generateToken, generateRefresheToken } from '../utils/generateToken.js';
+import { TokenErrors, generateRefresheToken, generateToken } from '../utils/generateToken.js';
+// import { generateToken, generateRefresheToken } from '../utils/generateToken.js';
+// import { TokenErrors } from '../utils/generateToken';
 
 export const postlogin = async (req, res) => {
-	// console.log(req.body)
+  // console.log(req.body)
   try {
     const {email, password} = req.body;
     
@@ -56,7 +58,11 @@ export const postregister = async (req, res) => {
     user = new User({ email, password });
     await user.save();
 
-    return res.json({ registro: "adicionado"})
+    // gerar el token JWT
+    const { token, expiresIn } = generateToken(user.id);
+    generateRefresheToken(user.id, res);
+
+    return res.json({ token, expiresIn })
   } catch(e) {
     // statements
     // alternativa por defecto mongoose
@@ -83,36 +89,31 @@ export const infoUser = async (req, res) => {
 
 export const refeshToken = async (req, res) => {
   try {
-    const Rtoken = req.cookies.refeshToken;
-    if (!Rtoken) {
-      throw { code: 12000 };
-    }
-    // console.log(Rtoken)
-    const {uid} = jwt.verify(Rtoken, process.env.JWT_REFERSH);
+    // const Rtoken = req.cookies.refeshToken;
+    // if (!Rtoken) {
+    //   throw { code: 12000 };
+    // }
+    // // console.log(Rtoken)
+    // const {uid} = jwt.verify(Rtoken, process.env.JWT_REFERSH);
 
     // console.log(payload)
-    const {token, expiresIn } = generateToken(uid);
+    
+    const {token, expiresIn } = generateToken(req.uid);
    
     return res.json({ token, expiresIn });
 
   } catch(e) {
     // statements
     console.log(e);
-    if (e.code === 12000) {
-      return res.status(403).json({error: 'No existe el token'});
-    }
+    return res.status(500).json({ error: 'error de server' });
 
-    const TokenErrors = {
-      "invalid signature": "La firma del JWT no es válida",
-      "jwt expired": "JWT expirado",
-      "invalid token": "Token no válido",
-      "No Bearer": "Utiliza formato Bearer",
-      "jwt malformed": "JWT formato no valido"
-    }
+    // if (e.code === 12000) {
+    //   return res.status(403).json({error: 'No existe el token'});
+    // }
 
-    return res
-      .status(401)
-      .send({ error: TokenErrors[e.message] || 'Error desconocido en el token' });
+    // return res
+    //   .status(401)
+    //   .send({ error: TokenErrors[e.message] || 'Error desconocido en el token' });
   }
 }
 
