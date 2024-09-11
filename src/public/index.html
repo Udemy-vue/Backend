@@ -5,44 +5,41 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Lodin</title>
+	<style>
+
+	</style>
 </head>
 <body>
 	<form action="" id="form">
-		<input type="text" id="a">
-		<input type="text" id="b">
-
+		<input type="text" id="a" placeholder="Email">
+		<input type="text" id="b" placeholder="Password">
 		<button type="submit">boton</button>
 		<h2>Token: </h2>
-		<h2 id="c" style="width: 5rem"></h2>
+		<p id="c" style="width: 5rem"></p>
 		<h2>ExpiresIn: </h2>
-		<h2 id="d"></h2>
+		<p id="d"></p>
 	</form>
-
-
 	<script>
-		const form = document.getElementById("form");
 
-		const dato = document.getElementById("c");
-		const ex = document.getElementById("d");
-		const password = "123123";
-		const email = "deus@test.com";
+		// const password = "123123";
+		// const email = "penelope@test.com";
 
-		form.addEventListener("submit", async (e) => {
+		form.addEventListener("submit", async function (e) {
 			e.preventDefault();
 			// console.log('holamundo')
 			try {
-				// console.log('Email:', email, 'Password:', password);
-				console.log(password);
-				console.log(email);
+				// const form = document.getElementById("form");
+				const password = document.getElementById("b");
+				const email = document.getElementById("a");
 
-				const res = await fetch('/api/login', {
+				const res = await fetch('http://localhost:4050/api/login', {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json'
 					},
-					body: JSON.stringify({ 
-						email: email, 
-						password: password
+					body: JSON.stringify({
+						email: email.value,
+						password: password.value
 				  })
 				});
 				// console.log('hola mundo')
@@ -50,8 +47,8 @@
 
 				const data = await res.json();
 
-				// dato.textContent = data.token;
-				// ex.textContent = data.expiresIn;
+				document.getElementById('c').textContent = data.token;
+				document.getElementById('d').textContent = data.expiresIn;
 			} catch(e) {
 				// statements
 				console.log(e);

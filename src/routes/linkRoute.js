@@ -8,10 +8,14 @@ const linkRoute = express.Router();
 
 linkRoute.get('/ok', requireToken, linkControll.getLinks);
 
+linkRoute.get('/:nanoLink', linkControll.getLinkes);
+
 linkRoute.get('/ok/:id', requireToken, paramsLinkValidator, validationResultExpress, linkControll.getLink);
 
 linkRoute.post('/ok', requireToken, bodyLinkValidatos, validationResultExpress, linkControll.createLink);
 
 linkRoute.delete('/ok/:id', requireToken, paramsLinkValidator, validationResultExpress, linkControll.removeLink);
+
+linkRoute.patch("/ok/:id", requireToken, paramsLinkValidator, bodyLinkValidatos, validationResultExpress, linkControll.updateLink);
 
 export default linkRoute;

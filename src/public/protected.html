@@ -12,7 +12,7 @@
 		
 		<!-- <input type="text" id="a"> -->
 
-		<button type="submit">Cerrar secion</button>
+		<button id="logout" type="submit">Cerrar secion</button>
 		<h2>Email: </h2>
 		<p id="b"></p>
 		<h2>Uid: </h2>
@@ -26,9 +26,6 @@
 		const email = document.getElementById("b");
 		const uid = document.getElementById("c");
 
-
-		// console.log(form);
-		
 		form.addEventListener("submit", async (e) => {
 			try {
 				// statements

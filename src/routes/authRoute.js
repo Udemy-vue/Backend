@@ -46,15 +46,9 @@ import { bodyLoginValidator, bodyRegisterValidator } from '../middlewares/valida
 
  const router = express.Router();
 
-router.post("/login", 
-	bodyLoginValidator,
-	validationResultExpress,
-	authControll.postlogin);
+router.post("/login", bodyLoginValidator, validationResultExpress, authControll.postlogin);
 
-router.post('/register', 
-	bodyRegisterValidator,
-	validationResultExpress,
-	authControll.postregister);
+router.post('/register', bodyRegisterValidator, validationResultExpress, authControll.postregister);
 
 router.get('/protected', requireToken, authControll.infoUser );
 

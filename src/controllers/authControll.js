@@ -17,13 +17,10 @@ export const postlogin = async (req, res) => {
     user.comparePassword(password);
     // console.log(resultado);
     if(!resultado) throw { code: 12000 };
-
-
     // const token = jwt.sign({ user: user }, process.env.JWT_SECRET )
     const {token, expiresIn } = generateToken(user.id);
 
     generateRefresheToken(user.id, res);
-
     // res.cookie('token', token, {
     //   httpOnly: true, 
     //   secure: !(process.env.MODO === 'developer')

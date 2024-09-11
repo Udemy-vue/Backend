@@ -39,13 +39,10 @@ import { TokenErrors } from '../utils/generateToken.js';
 // 	}
 // }
 
-
-// import jwt from 'jsonwebtoken';
-
 export const requireToken = (req, res, next) => {
 	try {
 
-		var token = req.headers?.authorization;
+		let token = req.headers?.authorization;
 
 		// console.log(token)
 		token = token.split(" ")[1];
@@ -54,15 +51,9 @@ export const requireToken = (req, res, next) => {
 			throw { code: 12000 };
 			// throw new Error('No exite el token en el header usa BEARER');
 		}
-		// console.log(token)
-		// console.log('hosmnsdfjhjaksddhfuiasrhdfui')
 		const payload = jwt.verify(token, process.env.JWT_SECRET);
-
-		// console.log(payload)
 		req.uid = payload.uid;
-
 		next();
-
 	} catch(e) {
 		// statements
 		// console.log(e);
