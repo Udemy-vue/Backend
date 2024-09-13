@@ -18,14 +18,15 @@ import cors from 'cors';
 const app = express();
 
 const whiteList = [process.env.ORIGIN1]
+
 app.use(cors({
     origin: function (origin, callback) {
         // console.log(origin);
-        if (whiteList.includes(origin)) {
+        if (!origin || whiteList.includes(origin)) {
             return callback(null, origin);
         }
         else {
-            return callback(`Error de CORS origin: ${origin} No autorizado!`);
+            return callback(new Error(`Error de CORS origin: ${origin} No autorizado!`));
         }
     }
 }));
