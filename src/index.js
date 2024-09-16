@@ -28,7 +28,8 @@ app.use(cors({
         else {
             return callback(new Error(`Error de CORS origin: ${origin} No autorizado!`));
         }
-    }
+    },
+    credentials: true
 }));
 
 app.use(express.json());
