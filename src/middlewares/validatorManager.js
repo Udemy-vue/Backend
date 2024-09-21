@@ -43,7 +43,7 @@ export const bodyLinkValidatos = [
 				return value;
 			} catch (e) {
 				// statements
-				throw new Error('Not found longlink 404');
+				throw new Error('Link no valido');
 			}
 		})
 ];

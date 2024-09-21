@@ -35,7 +35,7 @@ export const postlogin = async (req, res) => {
       return res.status(403).json({error: 'No existe este usuario' });
     }
     if(e.code === 12000 ) {
-      return res.status(403).json({error: 'Contraseña Incorrecta' });
+      return res.status(403).json({error: 'Usuario incorrecto' });
     }
     return res.status(500).json({ error: "Error de servidor" });
   }
