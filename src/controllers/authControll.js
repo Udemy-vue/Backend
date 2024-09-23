@@ -115,6 +115,11 @@ export const refeshToken = async (req, res) => {
 }
 
 export const logout = (req, res) => {
-  res.clearCookie('refeshToken');
-  res.json({ ok: true });
+  res.clearCookie('refreshToken', {
+        path: '/',
+        httpOnly: true,
+        secure: true,
+        sameSite: 'none'
+    })
+    res.json({ok: 'logout'})
 } 
