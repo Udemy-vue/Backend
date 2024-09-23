@@ -22,7 +22,8 @@ export const generateRefresheToken = (uid, res) => {
 		res.cookie('refeshToken', refeshToken, {
 			httpOnly: true,
 			secure: !(process.env.MODO === 'developer'),
-			expires: new Date(Date.now() + expiresIn * 1000)
+			expires: new Date(Date.now() + expiresIn * 1000),
+			sameSite: 'none'
 		});
 	} catch(e) {
 		// statements
